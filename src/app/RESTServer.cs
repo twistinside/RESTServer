@@ -1,7 +1,9 @@
 class RESTServer
 {
+
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        IHTTPService httpService = new HTTPService();
+        httpService.Listen();
     }
 }
