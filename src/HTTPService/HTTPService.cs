@@ -2,7 +2,6 @@ using System.Net;
 
 class HTTPService: IHTTPService
 {
-    string responseString = "<HTML><BODY> Hello, World!</BODY></HTML>";
 
     public void Listen()
     {
@@ -18,12 +17,10 @@ class HTTPService: IHTTPService
             HttpListenerContext context = listener.GetContext();
             HttpListenerRequest request = context.Request;
             HttpListenerResponse response = context.Response;
-            
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-            response.ContentLength64 = buffer.Length;
-            System.IO.Stream output = response.OutputStream;
-            output.Write(buffer,0,buffer.Length);
-            output.Close();
+
+            IActivity activity = ActivityFactory.GetActivityFromRequest(request);
+            activity.PerformActivityWithResponse(response);
+
             listener.Stop();
         }
     }

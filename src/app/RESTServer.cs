@@ -4,6 +4,9 @@ class RESTServer
     static void Main(string[] args)
     {
         IHTTPService httpService = new HTTPService();
-        httpService.Listen();
+        while (true)
+        {
+            httpService.Listen();
+        }
     }
 }
