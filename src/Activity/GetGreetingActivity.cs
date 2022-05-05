@@ -2,15 +2,17 @@ using System.Net;
 
 class GetGreetingActivity: IActivity
 {
-    private string _name;
+    private string verb = "GET";
+    private string endpoint = "\\greeting";
 
-    public GetGreetingActivity(string name)
+    public ActivityIdentifier GetActivityIdentifier()
     {
-        this._name = name;
+        return new ActivityIdentifier(verb, endpoint);
     }
+
     public void PerformActivityWithResponse(HttpListenerResponse response)
     {
-        string responseString = $"<HTML><BODY> Hello, {_name}!</BODY></HTML>";
+        string responseString = $"<HTML><BODY> Hello, World!</BODY></HTML>";
         byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
         response.ContentLength64 = buffer.Length;
         System.IO.Stream output = response.OutputStream;

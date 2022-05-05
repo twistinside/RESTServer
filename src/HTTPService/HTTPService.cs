@@ -2,9 +2,16 @@ using System.Net;
 
 class HTTPService: IHTTPService
 {
+    private ActivityProvider _activityProvider;
+
+    public HTTPService(ActivityProvider activityProvider)
+    {
+        this._activityProvider = activityProvider;
+    }
 
     public void Listen()
     {
+        // This prefix listens to all requests on port 8080
         string prefix = "http://+:8080/";
 
         using (var listener = new HttpListener())
@@ -18,9 +25,16 @@ class HTTPService: IHTTPService
             HttpListenerRequest request = context.Request;
             HttpListenerResponse response = context.Response;
 
-            IActivity activity = ActivityFactory.GetActivityFromRequest(request);
-            activity.PerformActivityWithResponse(response);
-
+            try
+            {
+                IActivity activity = _activityProvider.GetActivityFromRequest(request);
+                activity.PerformActivityWithResponse(response);
+            }
+            catch
+            {
+                
+            }
+            
             listener.Stop();
         }
     }
