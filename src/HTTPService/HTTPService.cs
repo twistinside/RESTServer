@@ -22,13 +22,11 @@ class HTTPService: IHTTPService
 
             // HTTPListener blocks while awaiting context
             HttpListenerContext context = listener.GetContext();
-            HttpListenerRequest request = context.Request;
-            HttpListenerResponse response = context.Response;
 
             try
             {
-                IActivity activity = _activityProvider.GetActivityFromRequest(request);
-                activity.PerformActivityWithResponse(response);
+                IActivity activity = _activityProvider.GetActivityFromContext(context);
+                activity.PerformActivityWithContext(context);
             }
             catch
             {

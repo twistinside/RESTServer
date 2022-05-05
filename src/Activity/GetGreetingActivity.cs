@@ -1,22 +1,46 @@
+using App.Model;
+using System.IO;
 using System.Net;
+using System.Text;
+using System.Text.Json;
 
 class GetGreetingActivity: IActivity
 {
-    private string verb = "GET";
-    private string endpoint = "\\greeting";
+    private const string _method = "GET";
+    private const string _endpoint = "/greeting";
 
     public ActivityIdentifier GetActivityIdentifier()
     {
-        return new ActivityIdentifier(verb, endpoint);
+        return new ActivityIdentifier(_method, _endpoint);
     }
 
-    public void PerformActivityWithResponse(HttpListenerResponse response)
+    public void PerformActivityWithContext(HttpListenerContext context)
     {
-        string responseString = $"<HTML><BODY> Hello, World!</BODY></HTML>";
-        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+        HttpListenerRequest request = context.Request;
+        HttpListenerResponse response = context.Response;
+
+        string requestBody = GetBodyFromRequest(request);
+        GetGreetingRequest getGreetingRequest = JsonSerializer.Deserialize<GetGreetingRequest>(requestBody);
+
+        GetGreetingRespone getGreetingResponse = new GetGreetingRespone()
+        {
+            Greeting = $"Hello, {getGreetingRequest.Name}!"
+        };
+
+        string responseString = JsonSerializer.Serialize(getGreetingResponse);
+        byte[] buffer = Encoding.UTF8.GetBytes(responseString);
         response.ContentLength64 = buffer.Length;
-        System.IO.Stream output = response.OutputStream;
+        Stream output = response.OutputStream;
         output.Write(buffer, 0, buffer.Length);
         output.Close();
+    }
+
+    private string GetBodyFromRequest(HttpListenerRequest request)
+    {
+        Stream stream = request.InputStream;
+        Encoding encoding = request.ContentEncoding;
+        StreamReader reader = new StreamReader(stream, encoding);
+        string body = reader.ReadToEnd();
+        return body;
     }
 }
