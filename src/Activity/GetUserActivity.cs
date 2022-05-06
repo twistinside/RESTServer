@@ -1,5 +1,4 @@
 using App.Model;
-using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -8,6 +7,13 @@ class GetUserActivity: IActivity
 {
     private const string _method = "GET";
     private const string _endpoint = "/user";
+
+    private IRedisUserService _redisService;
+
+    public GetUserActivity(IRedisUserService redisService)
+    {
+        this._redisService = redisService;
+    }
 
     public ActivityIdentifier GetActivityIdentifier()
     {
@@ -23,12 +29,12 @@ class GetUserActivity: IActivity
         string requestBody = Utils.GetBodyFromRequest(request);
         GetUserRequest getUserRequest = JsonSerializer.Deserialize<GetUserRequest>(requestBody);
 
+        User user = _redisService.GetUser(getUserRequest.UserName);
+
         GetUserResponse getUserResponse = new GetUserResponse()
         {
-            AverageReviewScore = 4,
-            NumberOfFilmsWatched = 24,
-            UserName = getUserRequest.UserName,
-            UserSince = DateTime.Now
+            UserName = user.UserName,
+            UserSince = user.UserSince
         };
 
         string responseString = JsonSerializer.Serialize(getUserResponse);
