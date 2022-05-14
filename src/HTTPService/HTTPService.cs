@@ -11,14 +11,14 @@ class HTTPService: IHTTPService
 
     public void Listen()
     {
-        // This prefix listens to all requests on port 8080
+        // This prefix listens to all requests on port 80
         string prefix = "http://+:80/";
 
         using (var listener = new HttpListener())
         {
             listener.Prefixes.Add(prefix);
             listener.Start();
-            Console.WriteLine("Awaiting HTTP request on port 8080...");
+            Console.WriteLine("Awaiting HTTP request on port 80...");
 
             // HTTPListener blocks while awaiting context
             HttpListenerContext context = listener.GetContext();
@@ -29,8 +29,9 @@ class HTTPService: IHTTPService
                 IActivity activity = _activityProvider.GetActivityFromContext(context);
                 activity.PerformActivityWithContext(context);
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 Console.WriteLine("Request failed, closing listener.");
             }
 

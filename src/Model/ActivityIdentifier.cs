@@ -23,11 +23,13 @@ class ActivityIdentifier
             return false;
         }
 
-        return this.method.Equals(item.method) && this.endpoint.Equals(item.endpoint);
+        return this.method.Equals(item.method) &&
+            this.endpoint.Equals(item.endpoint);
     }
 
     override public int GetHashCode()
     {
-        return method.GetHashCode() * endpoint.GetHashCode();
+        return this.method.GetHashCode() *
+            this.endpoint.GetHashCode();
     }
 }

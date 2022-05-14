@@ -10,10 +10,10 @@ namespace App.Redis
         
         public int AddAction(string action)
         {
-            return AddActionCount(action, 1);
+            return AddActionWithCount(action, 1);
         }
 
-        public int AddActionCount(string action, int count)
+        public int AddActionWithCount(string action, int count)
         {
             Console.WriteLine($"Incrementing count for {action}.");
             IDatabase db = _redis.GetDatabase();

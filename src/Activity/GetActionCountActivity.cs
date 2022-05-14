@@ -35,8 +35,8 @@ class GetActionCountActivity: IActivity
 
         GetActionCountRespone getActionCountResponse = new GetActionCountRespone()
         {
-            action = getActionCountRequest.Action,
-            count = count
+            Action = getActionCountRequest.Action,
+            Count = count
         };
 
         string responseString = JsonSerializer.Serialize(getActionCountResponse);

@@ -9,9 +9,6 @@ class ActivityProvider
         string method = context.Request.HttpMethod;
         string path = context.Request.Url.AbsolutePath;
 
-        Console.WriteLine(method);
-        Console.WriteLine(path);
-
         ActivityIdentifier activityIdentifier = new ActivityIdentifier(method, path);
 
         try

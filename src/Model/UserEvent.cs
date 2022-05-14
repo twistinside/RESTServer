@@ -18,5 +18,36 @@ namespace App.Model
         public string Context { get; set; }
         [JsonPropertyName("value")]
         public string Value { get; set; }
+
+        override public bool Equals(object? obj)
+        {
+            var item = obj as UserEvent;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.App.Equals(item.App) && 
+                this.UserId.Equals(item.UserId) && 
+                this.SessionId.Equals(item.SessionId) &&
+                this.LocalTime.Equals(item.LocalTime) && 
+                this.Action.Equals(item.Action) && 
+                this.Context.Equals(item.Context) && 
+                this.Value.Equals(item.Value); 
+
+        }
+
+
+        override public int GetHashCode()
+        {
+            return this.App.GetHashCode() *
+                this.UserId.GetHashCode() *
+                this.SessionId.GetHashCode() *
+                this.LocalTime.GetHashCode() *
+                this.Action.GetHashCode() *
+                this.Context.GetHashCode() *
+                this.Value.GetHashCode();
+        }
     }
 }
