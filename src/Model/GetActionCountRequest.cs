@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace App.Model
 {
     public class GetActionCountRequest
     {
-        public string action { get; set; }
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
     }
 }

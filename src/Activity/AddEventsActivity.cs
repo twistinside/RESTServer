@@ -29,14 +29,14 @@ class AddEventsActivity: IActivity
         string requestBody = Utils.GetBodyFromRequest(request);
         AddEventsRequest? addEventsRequest = JsonSerializer.Deserialize<AddEventsRequest>(requestBody);
 
-        foreach (UserEvent userEvent in addEventsRequest.user_events)
+        foreach (UserEvent userEvent in addEventsRequest.UserEvents)
         {
-            _ = _redisService.AddAction(userEvent.action);
+            _ = _redisService.AddAction(userEvent.Action);
         }
 
         AddEventsResponse addEventsResponse = new AddEventsResponse
         {
-            count = addEventsRequest.user_events.Count
+            Count = addEventsRequest.UserEvents.Count
         };
 
         string responseString = JsonSerializer.Serialize(addEventsResponse);

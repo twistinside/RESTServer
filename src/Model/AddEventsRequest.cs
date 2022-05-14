@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace App.Model
 {
     public class AddEventsRequest
     {
-        public List<UserEvent> user_events { get; set; }
+        [JsonPropertyName("user_events")]
+        public List<UserEvent> UserEvents { get; set; }
     }
 }

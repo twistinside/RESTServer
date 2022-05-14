@@ -28,14 +28,14 @@ class GetActionCountActivity: IActivity
 
         GetActionCountRequest getActionCountRequest = new GetActionCountRequest
         {
-            action = request.QueryString.Get("action")
+            Action = request.QueryString.Get("action")
         };
 
-        int count = _redisService.GetActionCount(getActionCountRequest.action);
+        int count = _redisService.GetActionCount(getActionCountRequest.Action);
 
         GetActionCountRespone getActionCountResponse = new GetActionCountRespone()
         {
-            action = getActionCountRequest.action,
+            action = getActionCountRequest.Action,
             count = count
         };
 

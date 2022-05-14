@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace App.Model
 {
     public class AddEventsResponse
     {
-        public int count { get; set; }
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
     }
 }
