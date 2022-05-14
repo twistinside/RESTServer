@@ -8,8 +8,7 @@ class RESTServer
         RedisService redisService = new RedisService();
 
         ActivityProvider activityProvider = new ActivityProvider();
-        activityProvider.RegisterActivity(new CreateUserActivity(redisService));
-        activityProvider.RegisterActivity(new GetUserActivity(redisService));
+        activityProvider.RegisterActivity(new AddEventsActivity(redisService));
 
         IHTTPService httpService = new HTTPService(activityProvider);
         while (true)

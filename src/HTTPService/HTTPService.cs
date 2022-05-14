@@ -23,6 +23,7 @@ class HTTPService: IHTTPService
             // HTTPListener blocks while awaiting context
             HttpListenerContext context = listener.GetContext();
 
+            // Once context is acquired, get the appropriate activity and do the work
             try
             {
                 IActivity activity = _activityProvider.GetActivityFromContext(context);
@@ -30,9 +31,9 @@ class HTTPService: IHTTPService
             }
             catch
             {
-                
+                Console.WriteLine("Request failed, closing listener.");
             }
-            
+
             listener.Stop();
         }
     }

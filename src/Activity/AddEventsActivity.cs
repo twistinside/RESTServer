@@ -3,14 +3,14 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-class CreateUserActivity: IActivity
+class AddEventsActivity: IActivity
 {
     private const string _method = "POST";
-    private const string _endpoint = "/user";
+    private const string _endpoint = "/events";
 
-    private IRedisUserService _redisService;
+    private IRedisActionService _redisService;
 
-    public CreateUserActivity(IRedisUserService redisService)
+    public AddEventsActivity(IRedisActionService redisService)
     {
         this._redisService = redisService;
     }
@@ -22,22 +22,20 @@ class CreateUserActivity: IActivity
 
     public void PerformActivityWithContext(HttpListenerContext context)
     {
-        Console.WriteLine("Executing create user activity.");
+        Console.WriteLine("Executing add events activity.");
         HttpListenerRequest request = context.Request;
         HttpListenerResponse response = context.Response;
 
         string requestBody = Utils.GetBodyFromRequest(request);
-        CreateUserRequest createUserRequest = JsonSerializer.Deserialize<CreateUserRequest>(requestBody);
+        AddEventsRequest? addEventsRequest = JsonSerializer.Deserialize<AddEventsRequest>(requestBody);
 
-        User user = _redisService.CreateUser(createUserRequest.UserName, DateTime.Now);
-
-        CreateUserResponse createUserResponse = new CreateUserResponse()
+        foreach (UserEvent userEvent in addEventsRequest.user_events)
         {
-            UserName = user.UserName,
-            UserSince = user.UserSince
-        };
+            _ = _redisService.AddAction(userEvent.action);
+        }
 
-        string responseString = JsonSerializer.Serialize(createUserResponse);
+        string responseString = $"Request successful.";
+        response.StatusCode = 200;
         byte[] buffer = Encoding.UTF8.GetBytes(responseString);
         response.ContentLength64 = buffer.Length;
         Stream output = response.OutputStream;
