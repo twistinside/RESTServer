@@ -3,14 +3,14 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-class AddEventsActivity: IActivity
+class GetActionCountActivity: IActivity
 {
-    private const string _method = "POST";
+    private const string _method = "GET";
     private const string _endpoint = "/events/";
 
     private IRedisActionService _redisService;
 
-    public AddEventsActivity(IRedisActionService redisService)
+    public GetActionCountActivity(IRedisActionService redisService)
     {
         this._redisService = redisService;
     }
@@ -22,24 +22,24 @@ class AddEventsActivity: IActivity
 
     public void PerformActivityWithContext(HttpListenerContext context)
     {
-        Console.WriteLine("Executing add events activity.");
+        Console.WriteLine("Executing get action count activity.");
         HttpListenerRequest request = context.Request;
         HttpListenerResponse response = context.Response;
 
-        string requestBody = Utils.GetBodyFromRequest(request);
-        AddEventsRequest? addEventsRequest = JsonSerializer.Deserialize<AddEventsRequest>(requestBody);
-
-        foreach (UserEvent userEvent in addEventsRequest.user_events)
+        GetActionCountRequest getActionCountRequest = new GetActionCountRequest
         {
-            _ = _redisService.AddAction(userEvent.action);
-        }
-
-        AddEventsResponse addEventsResponse = new AddEventsResponse
-        {
-            count = addEventsRequest.user_events.Count
+            action = request.QueryString.Get("action")
         };
 
-        string responseString = JsonSerializer.Serialize(addEventsResponse);
+        int count = _redisService.GetActionCount(getActionCountRequest.action);
+
+        GetActionCountRespone getActionCountResponse = new GetActionCountRespone()
+        {
+            action = getActionCountRequest.action,
+            count = count
+        };
+
+        string responseString = JsonSerializer.Serialize(getActionCountResponse);
         response.StatusCode = 200;
         byte[] buffer = Encoding.UTF8.GetBytes(responseString);
         response.ContentLength64 = buffer.Length;

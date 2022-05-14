@@ -12,7 +12,7 @@ class HTTPService: IHTTPService
     public void Listen()
     {
         // This prefix listens to all requests on port 8080
-        string prefix = "http://+:8080/";
+        string prefix = "http://+:80/";
 
         using (var listener = new HttpListener())
         {

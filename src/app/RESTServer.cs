@@ -9,6 +9,7 @@ class RESTServer
 
         ActivityProvider activityProvider = new ActivityProvider();
         activityProvider.RegisterActivity(new AddEventsActivity(redisService));
+        activityProvider.RegisterActivity(new GetActionCountActivity(redisService));
 
         IHTTPService httpService = new HTTPService(activityProvider);
         while (true)
