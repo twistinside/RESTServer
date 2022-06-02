@@ -6,6 +6,7 @@ namespace App.Model
     {
         [JsonPropertyName("action")]
         public string Action { get; set; }
+        
         [JsonPropertyName("count")]
         public int Count { get; set; }
 
